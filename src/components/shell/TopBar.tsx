@@ -60,7 +60,7 @@ export default function TopBar() {
   return (
     <>
       {/* ── Top bar ── */}
-      <header className="h-14 flex items-center px-4 bg-white border-b border-surface-border sticky top-0 z-20 flex-shrink-0">
+      <header className="h-14 flex items-center px-4 bg-white border-b border-surface-border z-20 flex-shrink-0">
 
         {/* Mobile: hamburger only — no logo, no page title */}
         <div className="flex md:hidden items-center flex-1">
