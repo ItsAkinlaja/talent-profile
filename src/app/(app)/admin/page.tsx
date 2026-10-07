@@ -23,9 +23,9 @@ function grad(name: string) {
 export default function AdminDashboard() {
   const dispatch = useAppDispatch();
   const { users, loading } = useAppSelector((s) => s.users);
-  const [dlId,      setDlId]    = useState<string | null>(null);
-  const [delTarget, setDel]     = useState<FullUser | null>(null);
-  const [deleting,  setDeleting]= useState(false);
+  const [dlId,      setDlId]     = useState<string | null>(null);
+  const [delTarget, setDel]      = useState<FullUser | null>(null);
+  const [deleting,  setDeleting] = useState(false);
 
   useEffect(() => { dispatch(fetchUsers()); }, [dispatch]);
 
@@ -49,10 +49,10 @@ export default function AdminDashboard() {
 
   return (
     <>
-      {/* ── Page header ── */}
+      {/* ── Header ── */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <MobileBreadcrumb title="Dashboard" />
+          <MobileBreadcrumb title="Admin Dashboard" />
           <h1 className="text-[22px] font-bold text-ink tracking-[-0.4px]">Dashboard</h1>
           <p className="text-[13px] text-ink-tertiary mt-0.5">All submitted talent profiles</p>
         </div>
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
         </Link>
       </div>
 
-      {/* ── Stats — 2 cols mobile, 4 cols desktop ── */}
+      {/* ── Stats ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard value={users.length} label="Total Profiles" colorClass="text-[#1A3FD0]" bgClass="bg-blue-50"
           icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>} />
@@ -75,62 +75,60 @@ export default function AdminDashboard() {
           icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>} />
       </div>
 
-      {/* ── Profiles list ── */}
+      {/* ── Profiles card ── */}
       <div className="bg-white rounded-2xl border border-surface-border shadow-card overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-surface-border">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-surface-border">
           <div className="flex items-center gap-2">
-            <h2 className="text-[14px] font-bold text-ink">All Profiles</h2>
+            <h2 className="text-[15px] font-bold text-ink">All Profiles</h2>
             <span className="h-5 px-2 bg-surface-tertiary rounded-full text-[11px] font-bold text-ink-tertiary flex items-center">{users.length}</span>
           </div>
-          <p className="text-[11.5px] text-ink-tertiary hidden sm:block">Download as PDF or DOCX</p>
+          <p className="text-[12px] text-ink-tertiary hidden sm:block">Download as PDF or DOCX</p>
         </div>
 
-        {loading && users.length === 0 ? (
-          <SkeletonList />
-        ) : users.length === 0 ? (
-          <EmptyState />
-        ) : (
+        {loading && users.length === 0 ? <SkeletonList /> : users.length === 0 ? <EmptyState /> : (
           <>
-            {/* ── MOBILE: stacked cards (hidden on md+) ── */}
-            <div className="md:hidden divide-y divide-surface-border">
+            {/* ── MOBILE cards ── */}
+            <div className="md:hidden">
               {users.map((u) => {
                 const name = `${u.userInfo.firstName} ${u.userInfo.lastName}`;
                 const g    = grad(name);
                 return (
-                  <div key={u.userInfo.id} className="p-4">
-                    {/* Top row: avatar + name + role */}
+                  <div key={u.userInfo.id} className="border-b border-surface-border last:border-0 p-4">
+                    {/* Avatar + Name row */}
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+                      <div className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 shadow-xs">
                         {u.userInfo.profilePhoto ? (
-                          <Image src={u.userInfo.profilePhoto} alt="" width={40} height={40}
-                            className="w-full h-full object-cover"
-                            unoptimized={u.userInfo.profilePhoto.includes("dicebear")} />
+                          <Image src={u.userInfo.profilePhoto} alt={name} width={48} height={48}
+                            className="w-full h-full object-cover" unoptimized />
                         ) : (
-                          <div className={`w-full h-full bg-gradient-to-br ${g} flex items-center justify-center text-white text-[13px] font-bold`}>
+                          <div className={`w-full h-full bg-gradient-to-br ${g} flex items-center justify-center text-white text-[14px] font-bold`}>
                             {u.userInfo.firstName[0]}{u.userInfo.lastName[0]}
                           </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <Link href={`/users/${u.userInfo.id}`}
-                          className="text-[14px] font-bold text-ink hover:text-[#1A3FD0] transition-colors truncate block">
+                          className="text-[15px] font-bold text-ink hover:text-[#1A3FD0] transition-colors block truncate">
                           {name}
                         </Link>
-                        <p className="text-[12px] text-ink-tertiary truncate">{u.userInfo.occupation}</p>
+                        <p className="text-[13px] text-ink-tertiary truncate mt-0.5">{u.userInfo.occupation}</p>
                       </div>
                     </div>
 
-                    {/* Details row */}
-                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                    {/* Location + email */}
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mb-3 pl-0.5">
                       {u.userContact?.email && (
-                        <span className="text-[11.5px] text-ink-secondary truncate max-w-[180px]">
+                        <span className="text-[12.5px] text-ink-secondary truncate max-w-full">
                           {u.userContact.email}
                         </span>
                       )}
                       {u.userAddress && (
-                        <span className="text-[11px] text-ink-disabled">
-                          · {u.userAddress.city}
+                        <span className="text-[12.5px] text-ink-disabled flex items-center gap-1">
+                          <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                          </svg>
+                          {u.userAddress.city}, {u.userAddress.country}
                         </span>
                       )}
                     </div>
@@ -139,9 +137,8 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-2">
                       <DlBtn label="PDF"  loading={dlId === u.userInfo.id + "pdf"}  onClick={() => dl("pdf",  u)} red />
                       <DlBtn label="DOCX" loading={dlId === u.userInfo.id + "docx"} onClick={() => dl("docx", u)} />
-                      <button
-                        onClick={() => setDel(u)}
-                        className="ml-auto h-8 w-8 rounded-xl flex items-center justify-center text-ink-disabled hover:text-danger hover:bg-danger/8 transition-colors">
+                      <button onClick={() => setDel(u)}
+                        className="ml-auto h-9 w-9 rounded-xl flex items-center justify-center text-ink-disabled hover:text-danger hover:bg-danger/8 transition-colors border border-surface-border">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
@@ -152,12 +149,12 @@ export default function AdminDashboard() {
               })}
             </div>
 
-            {/* ── DESKTOP: full table (hidden on mobile) ── */}
+            {/* ── DESKTOP table ── */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-surface-border bg-surface-secondary/50">
-                    {["Profile", "Email", "Role", "Location", "Date", "Export", ""].map(h => (
+                    {["Profile","Email","Role","Location","Date","Export",""].map(h => (
                       <th key={h} className="text-left px-5 py-2.5 text-[11px] font-semibold text-ink-disabled uppercase tracking-[0.5px] whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -173,8 +170,7 @@ export default function AdminDashboard() {
                             <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
                               {u.userInfo.profilePhoto ? (
                                 <Image src={u.userInfo.profilePhoto} alt="" width={32} height={32}
-                                  className="w-full h-full object-cover"
-                                  unoptimized={u.userInfo.profilePhoto.includes("dicebear")} />
+                                  className="w-full h-full object-cover" unoptimized />
                               ) : (
                                 <div className={`w-full h-full bg-gradient-to-br ${g} flex items-center justify-center text-white text-[11px] font-bold`}>
                                   {u.userInfo.firstName[0]}{u.userInfo.lastName[0]}
@@ -233,12 +229,8 @@ export default function AdminDashboard() {
               Permanently delete <strong className="text-ink">{delTarget.userInfo.firstName} {delTarget.userInfo.lastName}</strong>? This cannot be undone.
             </p>
             <div className="flex gap-2.5">
-              <button onClick={() => setDel(null)}
-                className="flex-1 h-10 rounded-xl border border-surface-border text-[13.5px] font-semibold text-ink hover:bg-surface-hover transition-colors">
-                Cancel
-              </button>
-              <button onClick={handleDelete} disabled={deleting}
-                className="flex-1 h-10 rounded-xl bg-danger hover:bg-red-600 text-white text-[13.5px] font-semibold transition-colors disabled:opacity-60">
+              <button onClick={() => setDel(null)} className="flex-1 h-10 rounded-xl border border-surface-border text-[13.5px] font-semibold text-ink hover:bg-surface-hover transition-colors">Cancel</button>
+              <button onClick={handleDelete} disabled={deleting} className="flex-1 h-10 rounded-xl bg-danger hover:bg-red-600 text-white text-[13.5px] font-semibold transition-colors disabled:opacity-60">
                 {deleting ? "Deleting…" : "Delete"}
               </button>
             </div>
@@ -249,8 +241,6 @@ export default function AdminDashboard() {
   );
 }
 
-/* ── Sub-components ── */
-
 function StatCard({ value, label, icon, colorClass, bgClass }: {
   value: number; label: string; icon: React.ReactNode; colorClass: string; bgClass: string;
 }) {
@@ -259,7 +249,7 @@ function StatCard({ value, label, icon, colorClass, bgClass }: {
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${bgClass} ${colorClass}`}>
         {icon}
       </div>
-      <p className="text-[24px] sm:text-[28px] font-bold text-ink tracking-[-0.5px] leading-none mb-0.5">{value}</p>
+      <p className="text-[26px] font-bold text-ink tracking-[-0.5px] leading-none mb-0.5">{value}</p>
       <p className="text-[12px] font-semibold text-ink-secondary leading-tight">{label}</p>
     </div>
   );
@@ -270,18 +260,17 @@ function DlBtn({ label, loading, onClick, red }: {
 }) {
   return (
     <button onClick={onClick} disabled={loading}
-      className={`inline-flex items-center gap-1.5 h-8 px-3 text-[12px] font-semibold rounded-xl border transition-colors disabled:opacity-50 ${
-        red
-          ? "bg-red-50 text-red-600 hover:bg-red-100 border-red-100"
-          : "bg-blue-50 text-[#1A3FD0] hover:bg-blue-100 border-blue-100"
+      className={`inline-flex items-center gap-1.5 h-9 px-4 text-[13px] font-semibold rounded-xl border transition-colors disabled:opacity-50 ${
+        red ? "bg-red-50 text-red-600 hover:bg-red-100 border-red-100"
+            : "bg-blue-50 text-[#1A3FD0] hover:bg-blue-100 border-blue-100"
       }`}>
       {loading ? (
-        <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
         </svg>
       ) : (
-        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
         </svg>
       )}
@@ -295,12 +284,12 @@ function SkeletonList() {
     <div className="divide-y divide-surface-border">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 px-4 py-4">
-          <div className="w-10 h-10 rounded-xl bg-surface-tertiary animate-pulse flex-shrink-0" />
+          <div className="w-12 h-12 rounded-2xl bg-surface-tertiary animate-pulse flex-shrink-0" />
           <div className="flex-1 space-y-2">
-            <div className="h-3.5 bg-surface-tertiary rounded animate-pulse w-32" />
-            <div className="h-3 bg-surface-tertiary rounded animate-pulse w-48" />
+            <div className="h-3.5 bg-surface-tertiary rounded animate-pulse w-36" />
+            <div className="h-3 bg-surface-tertiary rounded animate-pulse w-52" />
           </div>
-          <div className="h-8 w-16 bg-surface-tertiary rounded-xl animate-pulse" />
+          <div className="h-9 w-16 bg-surface-tertiary rounded-xl animate-pulse" />
         </div>
       ))}
     </div>
