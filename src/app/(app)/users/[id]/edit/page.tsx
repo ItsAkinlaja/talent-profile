@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchUserById } from "@/store/slices/usersSlice";
 import UserWizard from "@/components/wizard/UserWizard";
 import { PageLoader } from "@/components/ui/LoadingSpinner";
+import MobileBreadcrumb from "@/components/ui/MobileBreadcrumb";
 
 export default function EditUserPage() {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ export default function EditUserPage() {
 
   return (
     <div className="max-w-2xl mx-auto w-full">
+      <MobileBreadcrumb back={`/users/${id}`} backLabel="Profile" title="Edit Profile" />
       <div className="mb-6">
         <h1 className="text-[22px] font-bold text-ink tracking-[-0.4px]">Edit Profile</h1>
         <p className="text-[13px] text-ink-tertiary mt-0.5">

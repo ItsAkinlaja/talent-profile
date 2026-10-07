@@ -8,6 +8,7 @@ import ResumeView from "@/components/resume/ResumeView";
 import { PageLoader } from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
 import { exportUserAsPdf } from "@/lib/exportPdf";
+import MobileBreadcrumb from "@/components/ui/MobileBreadcrumb";
 
 export default function UserViewPage() {
   const { id } = useParams<{ id: string }>();
@@ -38,6 +39,7 @@ export default function UserViewPage() {
 
   return (
     <div className="max-w-4xl mx-auto w-full">
+      <MobileBreadcrumb back="/users" backLabel="Profiles" title={`${selectedUser.userInfo.firstName} ${selectedUser.userInfo.lastName}`} />
       {/* Actions bar */}
       <div className="flex items-center justify-between mb-6">
         <div className="text-[13px] text-ink-tertiary">

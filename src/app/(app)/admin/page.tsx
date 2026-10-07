@@ -8,6 +8,7 @@ import { exportUserAsPdf }  from "@/lib/exportPdf";
 import { exportUserAsDocx } from "@/lib/exportDocx";
 import Link from "next/link";
 import Image from "next/image";
+import MobileBreadcrumb from "@/components/ui/MobileBreadcrumb";
 
 const GRAD = [
   "from-violet-500 to-indigo-600", "from-blue-500 to-cyan-500",
@@ -51,6 +52,7 @@ export default function AdminDashboard() {
       {/* ── Page header ── */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
+          <MobileBreadcrumb title="Dashboard" />
           <h1 className="text-[22px] font-bold text-ink tracking-[-0.4px]">Dashboard</h1>
           <p className="text-[13px] text-ink-tertiary mt-0.5">All submitted talent profiles</p>
         </div>
