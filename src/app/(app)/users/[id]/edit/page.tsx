@@ -18,7 +18,7 @@ export default function EditUserPage() {
   if (!selectedUser) return null;
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl mx-auto w-full">
       <div className="mb-6">
         <h1 className="text-[22px] font-bold text-ink tracking-[-0.4px]">Edit Profile</h1>
         <p className="text-[13px] text-ink-tertiary mt-0.5">

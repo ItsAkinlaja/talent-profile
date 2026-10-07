@@ -37,7 +37,7 @@ export default function UserViewPage() {
   );
 
   return (
-    <>
+    <div className="max-w-4xl mx-auto w-full">
       {/* Actions bar */}
       <div className="flex items-center justify-between mb-6">
         <div className="text-[13px] text-ink-tertiary">
@@ -86,6 +86,6 @@ export default function UserViewPage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

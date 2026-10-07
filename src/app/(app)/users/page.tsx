@@ -82,7 +82,7 @@ export default function UsersPage() {
           </svg>
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email, role…"
-            className="w-full h-9 pl-9 pr-3 text-[13px] bg-white border border-surface-border rounded-lg outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-50 transition-all placeholder:text-ink-disabled" />
+            className="w-full h-9 pl-9 pr-3 text-[16px] bg-white border border-surface-border rounded-lg outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-50 transition-all placeholder:text-ink-disabled" />
         </div>
 
         {/* View toggle — desktop only */}

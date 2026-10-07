@@ -149,8 +149,8 @@ function FormBody({
     : "block text-[13px] font-semibold text-gray-700 mb-1.5";
 
   const inputCls = glass
-    ? "w-full h-12 pl-10 pr-4 text-[14px] text-white bg-white/25 border border-white/40 rounded-xl outline-none placeholder:text-white/60 focus:border-[#22C55E] focus:bg-white/30 transition-all duration-200"
-    : "w-full h-12 pl-10 pr-4 text-[14px] text-gray-800 border border-gray-200 rounded-xl outline-none bg-white transition-all placeholder:text-gray-400 focus:border-[#1A3FD0] focus:ring-3 focus:ring-blue-50";
+    ? "w-full h-12 pl-10 pr-4 text-[16px] text-white bg-white/25 border border-white/40 rounded-xl outline-none placeholder:text-white/60 focus:border-[#22C55E] focus:bg-white/30 transition-all duration-200"
+    : "w-full h-12 pl-10 pr-4 text-[16px] text-gray-800 border border-gray-200 rounded-xl outline-none bg-white transition-all placeholder:text-gray-400 focus:border-[#1A3FD0] focus:ring-3 focus:ring-blue-50";
 
   const iconCls  = glass ? "text-white/70" : "text-gray-400";
   const subTextCls = glass ? "text-white/90" : "text-gray-600";
