@@ -279,52 +279,97 @@ function GridView({ users, onView, onEdit, onDelete }: {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fade-in">
       {users.map((u) => {
         const name = `${u.userInfo.firstName} ${u.userInfo.lastName}`;
+        const initials = `${u.userInfo.firstName[0]}${u.userInfo.lastName[0]}`;
         const grad = avatarColor(name);
+        const hasPhoto = !!u.userInfo.profilePhoto;
+
         return (
           <div key={u.userInfo.id}
-            className="bg-white rounded-xl border border-surface-border shadow-card hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-200 overflow-hidden group">
-            {/* Card header strip */}
-            <div className={`h-16 bg-gradient-to-r ${grad} relative`}>
-              <div className="absolute inset-0 opacity-10"
-                style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
-            </div>
-            {/* Avatar overlapping strip */}
-            <div className="px-4 pb-4">
-              <div className="-mt-8 mb-3">
-                <div className="w-14 h-14 rounded-xl ring-4 ring-white overflow-hidden shadow-card">
-                  {u.userInfo.profilePhoto ? (
-                    <Image src={u.userInfo.profilePhoto} alt="" width={56} height={56}
-                      className="w-full h-full object-cover"
-                      unoptimized={u.userInfo.profilePhoto.includes('dicebear')} />
-                  ) : (
-                    <div className={`w-full h-full bg-gradient-to-br ${grad} flex items-center justify-center text-white text-[15px] font-bold`}>
-                      {u.userInfo.firstName[0]}{u.userInfo.lastName[0]}
-                    </div>
-                  )}
+            className="bg-white rounded-2xl border border-surface-border shadow-card hover:shadow-elevated hover:-translate-y-1 transition-all duration-200 overflow-hidden group flex flex-col">
+
+            {/* ── Photo / banner ── */}
+            <div className="relative h-32 overflow-hidden flex-shrink-0">
+              {hasPhoto ? (
+                /* Real photo fills the entire top area */
+                <Image
+                  src={u.userInfo.profilePhoto!}
+                  alt={name}
+                  fill
+                  className="object-cover object-top"
+                  unoptimized
+                />
+              ) : (
+                /* Fallback: brand gradient with big initials */
+                <div className={`w-full h-full bg-gradient-to-br ${grad} flex items-center justify-center`}>
+                  <span className="text-[36px] font-bold text-white/80 select-none">{initials}</span>
                 </div>
+              )}
+              {/* Subtle gradient overlay at bottom so text reads over photo */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+              {/* Name + role overlaid on photo */}
+              <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+                <p className="text-[14.5px] font-bold text-white leading-tight drop-shadow-sm">{name}</p>
+                <p className="text-[12px] text-white/80 mt-0.5 drop-shadow-sm">{u.userInfo.occupation}</p>
               </div>
-              <button onClick={() => onView(u.userInfo.id)} className="text-left w-full">
-                <p className="text-[14px] font-bold text-ink hover:text-brand-600 transition-colors leading-tight">{name}</p>
-                <p className="text-[12px] text-ink-tertiary mt-0.5">{u.userInfo.occupation}</p>
-              </button>
-              <div className="flex items-center gap-1.5 mt-2.5 text-[11.5px] text-ink-disabled">
-                <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+
+              {/* Delete button top-right — only on hover */}
+              <button onClick={() => onDelete(u)}
+                className="absolute top-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/30 hover:bg-danger text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
-                <span className="truncate">{u.userAddress ? `${u.userAddress.city}, ${u.userAddress.country}` : "—"}</span>
-              </div>
-              {/* Actions */}
-              <div className="flex gap-1.5 mt-3.5 pt-3.5 border-t border-surface-border">
-                <button onClick={() => onView(u.userInfo.id)}
-                  className="flex-1 h-7 rounded-lg text-[12px] font-semibold bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors">View</button>
-                <button onClick={() => onEdit(u.userInfo.id)}
-                  className="h-7 px-3 rounded-lg text-[12px] font-semibold bg-surface-tertiary text-ink-secondary hover:bg-surface-border transition-colors">Edit</button>
-                <button onClick={() => onDelete(u)}
-                  className="h-7 w-7 rounded-lg flex items-center justify-center text-ink-disabled hover:text-danger hover:bg-danger/8 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </button>
+            </div>
+
+            {/* ── Card body ── */}
+            <div className="p-4 flex flex-col flex-1">
+              {/* Location */}
+              {u.userAddress && (
+                <div className="flex items-center gap-1.5 text-[12px] text-ink-disabled mb-3">
+                  <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                   </svg>
+                  <span className="truncate">{u.userAddress.city}, {u.userAddress.country}</span>
+                </div>
+              )}
+
+              {/* Email */}
+              {u.userContact?.email && (
+                <p className="text-[12px] text-ink-tertiary truncate mb-3">
+                  {u.userContact.email}
+                </p>
+              )}
+
+              {/* Education count badge */}
+              {u.userAcademics && u.userAcademics.length > 0 && (
+                <div className="flex items-center gap-1.5 mb-3">
+                  <span className="inline-flex items-center gap-1 h-5 px-2 bg-blue-50 text-[#1A3FD0] text-[11px] font-semibold rounded-full">
+                    <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    {u.userAcademics.length} school{u.userAcademics.length > 1 ? "s" : ""}
+                  </span>
+                  <span className="inline-flex items-center h-5 px-2 bg-surface-tertiary text-ink-tertiary text-[11px] font-semibold rounded-full">
+                    {u.userInfo.gender}
+                  </span>
+                </div>
+              )}
+
+              {/* Spacer */}
+              <div className="flex-1" />
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-3 border-t border-surface-border mt-auto">
+                <button onClick={() => onView(u.userInfo.id)}
+                  className="flex-1 h-8 rounded-xl text-[13px] font-semibold text-white transition-all hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg,#1A3FD0 0%,#22C55E 100%)" }}>
+                  View
+                </button>
+                <button onClick={() => onEdit(u.userInfo.id)}
+                  className="h-8 px-3.5 rounded-xl text-[13px] font-semibold bg-surface-tertiary text-ink-secondary hover:bg-surface-border transition-colors">
+                  Edit
                 </button>
               </div>
             </div>
